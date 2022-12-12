@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<!--
+Project #1 implementation - Create a simple "to-do list" application,
+using client-side HTML, CSS, and Javascript only.
+-->
+<html>
+    <head>
+        <!-- Required title -->
+        <title>A simple to-do list app</title>
+        
+        <!-- Required meta tags -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        
+        <!-- My css -->
+        <style>
+            #main-container{
+                text-align: center;
+                height: auto;
+                width: auto;
+            }
+            #todo{
+                width: 650px;
+                height: auto;
+                margin-left: auto;
+                margin-right: auto;
+                /*margin-top: 50px;*/
+            }
+            #navContainer{
+                line-height: 20px;
+                text-align: center;
+                width: 92.5%;
+                height: 13%;
+                border-radius: 5px;
+            }
+            #navigation{
+                width: 100%;
+                height: auto;
+            }
+            #btnContainer{
+                margin-top: 100px;
+                width: auto;
+                line-height: 200px;
+                text-align: center;
+                height: auto;
+            }
+            .content{
+                line-height: 200px;
+                text-align: center;
+                height: auto;
+                width: 700px;
+                font-family: Arial, Helvetica, sans-serif;
+                margin: 10px;
+                border-radius: 5px;
+            }
+            .welcomebtn{
+                color: white;
+                height: auto;
+                width: auto;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 40px;
+            }
+            #appDesc{
+                margin-top: 10px;
+                margin-bottom: 90px;
+            }
+            #signupFrmDiv{
+                text-align: left;
+                width: 650px;
+                height: auto;
+                border-radius: 5px;
+                margin-top: 100px;
+            }
+            #loginFrmDiv{
+                text-align: left;
+                width: 650px;
+                height: auto;
+                border-radius: 5px;
+                margin-top: 90px;
+            }
+            #dashboard{
+                width: 650px;
+                height: auto;
+                margin-top: 5px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #aboveDashboard{
+                width: 650px;
+                height: auto;
+                margin-top: 90px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #singleTodoItem{
+                width: 650px;
+                height: auto;
+                margin-top: 90px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #TODOcreationfrmDiv{
+                text-align: left;
+                width: 650px;
+                height: auto;
+                border-radius: 5px;
+                margin-top: 90px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #signupFrm{
+                margin-bottom: 20px;
+                margin-top: 20px;
+            }
+            #loginFrm{
+                margin-bottom: 20px;
+                margin-top: 20px;
+            }
+            .frmInputs{
+                line-height: 20px;
+            }
+            #signupdiv{
+                float: left;
+            }
+            #logindiv{
+                float: left;
+            }
+            #srchFrm{
+                float: right;
+            }
+            .errmsg{
+                font-weight: bold;
+                color: crimson;
+                margin-bottom: 5px;
+                font-size: 15px;
+            }
+            #loginBtn{
+                margin-top: 10px;
+            }
+            #signUpBtn{
+                margin-top: 10px;
+            }
+            #todoCreationBtn{
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+            .acctCreationSuccessIcon{
+                width: 35px;
+                height: auto;
+                border-radius: 50%;
+            }
+            #usernameWelcome{
+                font-weight: bold;
+            }
+            #usernmWelcomeSpan{
+                float: right;
+            }
+            #newTODO{
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+            .tick {
+                min-width: 30px;
+                min-height: 30px;
+                border: 3px solid #333;
+                border-radius: 50%;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                border-color: lightblue;
+            }
+            .todoDESC{
+                text-align: left;
+            }
+            .listNameOption{
+                font-weight: bold;
+            }
+            #InputListName2{
+                float: right;
+                width: 350px;
+            }
+            #renameListIcon{
+                margin-bottom: 50px;
+            }
+            #renameListSpan{
+                color: #0d6efd;
+                font-size: 30px;
+                font-weight: bold;
+                text-align:right;
+                padding-right:3px;
+            }
+            #renameListDiv{
+                text-align:left;
+                padding-left:0px;
+            }
+            #newListNameEle{
+                max-width: 92%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="main-container" class="container">
+            
+            <!-- Description -->
+            <div id="appDesc" class="row fs-1"><h1>A simple to-do list App</h1></div>
+            
+            <!-- navbar -->
+            <div id="navContainer" class="border border-2 row col-12 position-absolute start-50 translate-middle">
+                <div id="navigation" class="row col-12">
+                    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                    <a class="navbar-brand" href="#">
+                        <img
+                            class="d-inline-block"
+                            src="https://firstclicklimited.com/assets/img/first-click-favicon.png"/>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul id="navBr" class="navbar-nav">
+                        <li class="nav-item active">
+                          <a id="Home" class="nav-link active" href="#">Home <span class="sr-only"></span></a>
+                        </li>
+                        <li id="Dashbd" class="nav-item" style="display:none">
+                          <a class="nav-link" href="#">Dashboard</a>
+                        </li>
+                        <!--<li class="nav-item">
+                          <a class="nav-link" href="#">Link</a>
+                        </li>-->
+                        <li class="nav-item">
+                            <button style="display:none" id="newTODO" type="button" class="btn btn-primary btn-lg">Create/Add to list</button>
+                        </li>
+                        <li id="userWelcome" class="nav-item dropdown">
+                          <a style="display:none" class="nav-link dropdown-toggle" href="#" id="usernmWelcomeSpan" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span id="usernameWelcome"></span>
+                          </a>
+                            <div id="userWelcomeDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a id="userSetting" class="dropdown-item" href="#">Setting</a>
+                            <!--<a class="dropdown-item" href="#">Logout</a>-->
+                            <div class="dropdown-divider"></div>
+                            <a id="Logout" class="dropdown-item" href="#">Logout</a>
+                          </div>
+                        </li>
+                      </ul>
+                      <!--<form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                      </form>-->
+                      
+                     <!--<span style="display:none;" id="usernmWelcomeSpan">Welcome <span id="usernameWelcome"></span></span>-->
+                    </div>
+                  </nav>
+                </div>
+            </div>
+            <div style="display:none" id="TODOcreationfrmDiv" class="row container-fluid">
+                <form id="TODOcreationfrm">
+                    <div class="form-group" id="TODOCreationMSGdiv" style="display:none; height: 100px;">
+                        <span id="TODOCreationMSG" class="mh-100 errmsg form-label"><i class="fas fa-check fa-3x border border-2 text-success font-weight-bold"></i> Your TODO task is sucessfully created</span>
+                    </div>
+                    <div class="form-group frmInputs">
+                        <label class="form-label"><b>List Name</b></label>
+                        <input id="InputListName" list="ListName" type="text" name="todoListName" class="form-control loginfrmInputs" placeholder="Enter list name or double click here to choose existing list to add to">
+                        <datalist id="ListName"></datalist>
+                    </div>
+                    <div class="form-groupaccountCreationMSG frmInputs">
+                        <label class="form-label"><b>TODO Title</b></label>
+                      <input name="todoTitle" type="text" class="form-control loginfrmInputs" id="InputTodoTitle"  placeholder="Enter TODO title" maxlength="50" required="required">
+                    </div>
+                    <div class="form-group frmInputs">
+                        <label class="form-label"><b>Description</b></label>
+                      <textarea name='todoDesc' rows='8' cols='35' class="form-control loginfrmInputs" id="InputTodoDesc" placeholder="Describe what you are TODO" maxlength="400" required="required"></textarea>
+                    </div>
+                    <button id="todoCreationBtn" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div id="todo" class="row col-12">
+                <div id="btnContainer" class="row col-12">
+                <!-- signup button -->
+                <div id="signupdiv" class="border border-2 content col-6"><button id="signup" type="button" class="btn btn-secondary btn-lg welcomebtn">Sign-up</button></div>
+                <!-- login button -->
+                <div id="logindiv" class="border border-2 content col-6"><button id="login" type="button" class="btn btn-secondary btn-lg welcomebtn">Login</button></div>
+                </div>
+            </div>
+            <div style="display:none" id="aboveDashboard" class="list-group row col-12">     
+            </div>
+            <div style="display:none" id="dashboard" class="list-group row col-12">     
+            </div>
+            <div style="display:none" id="loginFrmDiv" class="row container-fluid border border-2">
+                <form id="loginFrm">
+                    <div class="form-group" id="accountCreationMSGdiv" style="display:none; height: 100px;">
+                        <span id="accountCreationMSG" class="mh-100 errmsg form-label"><i class="fas fa-check fa-3x border border-2 text-success font-weight-bold"></i> Your account is created, you may now login</span>
+                    </div>
+                    <div class="form-group" id="loginErrMsgdiv" style="display:none">
+                        <span id="loginErrMsg" class="errmsg form-label"><i class="fas fa-exclamation"></i> Your username or password is invalid</span>
+                    </div>
+                    <div class="form-group frmInputs">
+                      <label for="exampleInputEmail1" class="form-label">Email address</label>
+                      <input name="email" type="email" class="form-control loginfrmInputs" id="InputLoginEmail" aria-describedby="emailHelp"  placeholder="Enter your email here" required="required">
+                    </div>
+                    <div class="form-group frmInputs">
+                      <label for="exampleInputPassword1" class="form-label">Password</label>
+                      <input name="passwd" type="password" class="form-control loginfrmInputs" id="InputLoginPassword" placeholder="Enter your password" maxlength="12" required="required">
+                    </div>
+                    <button id="loginBtn" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div style="display:none" id="signupFrmDiv" class="row container-fluid border border-2">
+                <form id="signupFrm">
+                    <div class="form-group" id="accountChangeMSGdiv" style="display:none; height: 100px;">
+                        <span id="accountChangeMSG" class="mh-100 errmsg form-label"><i class="fas fa-check fa-3x border border-2 text-success font-weight-bold"></i> Your account detail is successfully changed</span>
+                    </div>
+                    <div class="form-group frmInputs">
+                      <label class="form-label">first name</label>
+                      <input name="firstname" type="text" class="form-control fInputs" id="InputFirstname" maxlength="12" onBlur=Validate_firstname(this.form.firstname.value); onPaste=Validate_firstname(this.form.firstname.value); onKeyUp=Validate_firstname(this.form.firstname.value); onChange=Validate_firstname(this.form.firstname.value); required="required">
+                      <label style="display:none" id="firstnm" class="errmsg form-label"><i class="fas fa-exclamation"></i> Enter a valid name</label>
+                    </div>
+                    <div class="form-group frmInputs">
+                      <label class="form-label">last name</label>
+                      <input name="lastname" type="text" class="form-control fInputs" id="InputLastname" maxlength="12" onBlur=Validate_lastname(this.form.lastname.value); onPaste=Validate_lastname(this.form.lastname.value); onKeyUp=Validate_lastname(this.form.lastname.value); onChange=Validate_lastname(this.form.lastname.value); required="required">
+                      <label style="display:none" id="lastnm" class="errmsg form-label"><i class="fas fa-exclamation"></i> Enter a valid name</label>
+                    </div>
+                    <div class="form-group frmInputs">
+                      <label for="exampleInputEmail1" class="form-label">Email address</label>
+                      <input name="email" type="email" class="form-control fInputs" id="InputEmail" aria-describedby="emailHelp"  placeholder="Enter your email here" autocomplete='off' onBlur=Validate_email(this.form.email.value); onPaste=Validate_email(this.form.email.value); onKeyUp=Validate_email(this.form.email.value); onChange=Validate_email(this.form.email.value); required="required">
+                      <label style="display:none" id="email" class="errmsg form-label"><i class="fas fa-exclamation"></i> Enter a valid email address, e.g e.edxyz@yahoo.com</label>
+                    </div>
+                    <!--<div class="form-group frmInputs">
+                      <label class="form-label">username</label>
+                      <input name="userName" type="text" class="form-control fInputs" id="InputUsername" maxlength="12"  placeholder="create a username, e.g tundu_ibrimo" autocomplete='off' onBlur=Validate_username(this.form.userName.value); onPaste=Validate_username(this.form.userName.value); onKeyUp=Validate_username(this.form.userName.value); onChange=Validate_username(this.form.userName.value) required="required">
+                      <label style="display:none" id="usernm" class="errmsg form-label"><i class="fas fa-exclamation"></i> Lowercase and uppercase alphabets, either a dot or an underscore, 8-12 chars.</label>
+                    </div>-->
+                    <div class="form-group frmInputs">
+                      <label for="exampleInputPassword1" class="form-label">Password</label>
+                      <input name="password" type="password" class="form-control fInputs" id="InputPassword" placeholder="Enter your password, e.g *TUDSman001*" maxlength="12"  autocomplete="off" onBlur=Validate_password(this.form.password.value); onPaste=Validate_password(this.form.password.value); onKeyUp=Validate_password(this.form.password.value); onChange=Validate_password(this.form.password.value); required="required">
+                      <label style="display:none" id="passwd" class="errmsg form-label"><i class="fas fa-exclamation"></i> At least 2 Uppercase, 2 lowercase alphabets, 2 digits, 2 special chars, 8-12 chars.</label>
+                    </div>
+                    <div class="form-group frmInputs">
+                      <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
+                      <input name="conPassword" type="password" class="form-control" id="InputconPassword" maxlength="12" placeholder="Re-enter your password" autocomplete='off' onBlur=Validate_password_again(this.form.conPassword.value, this.form.password.value); onPaste=Validate_password_again(this.form.conPassword.value,this.form.password.value); onKeyUp=Validate_password_again(this.form.conPassword.value,this.form.password.value); onChange=Validate_password_again(this.form.conPassword.value,this.form.password.value); required/>
+                      <label style="display:none" id="conpasswd" class="errmsg form-label"><i class="fas fa-exclamation"></i> At least 2 Uppercase, 2 lowercase alphabets, 2 digits, 2 special chars, 8-12 chars.</label>
+                    </div>
+                    <div class="form-group form-check frmInputs">
+                      <label class="form-check-label" for="exampleCheck1">I agree to the Terms of Use</label>
+                      <input type="checkbox" class="form-check-input fInputs" id="InputCheck" required="required">
+                      <label style="display:none" id="chk" class="errmsg form-label"><i class="fas fa-exclamation"></i>Accept Terms of use</label>
+                    </div>
+                    <button id="signUpBtn" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div id="renameListIcon" class="container" style="display:none"><div id="renameListMainDiv" class="row"><div id="renameListSpan" class="col-sm"></div>  <div id="renameListDiv" class="col-sm">|  <i class="fas fa-edit fa-2x"></i><a id="renameListAnchor" href="#">Rename List</a></div></div></div>
+            <input name="newListName" type="text" id="newListNameInput" style="display: none" placeholder="Enter key after typing">
+        </div>
+        <script>
+            /*function Validate_username(string){
+                //must not contain any character other than Uppercase and lowercase alphabets including . or _
+                var Pattrn1 = /(?=(.*[A-Za-z._]){8,12})/;
+                var result1 = Pattrn1.test(string);
+
+                //contain at lowercase alphabet
+                var Pattrn3 = /(?=(.*[a-z]))/;
+                var result3 = Pattrn3.test(string);
+
+                //Contain either a dot or an underscore
+                var Pattrn4 = /(\.|_)/g;
+                var result4 = string.match(Pattrn4);
+
+                if(result1 === false || result3 === false || result4 === null){
+                    document.getElementById("usernm").style.display='block'; //show div
+                    return false;
+                }else{
+                    document.getElementById("usernm").style.display='none'; //hide div
+                    return true;//do noting
+                }
+            }*/
+            function Validate_password(string){
+                //contain minimum of 8 chars, maximum of 12 chars
+                var Pattrn = /(?=(.*[A-Za-z0-9\W]){8,12})/;
+                var result = Pattrn.test(string);
+
+                //contain at least 2 Uppercase alphabet
+                var Pattrn1 = /(?=(.*[A-Z]){2,})/;
+                var result1 = Pattrn1.test(string);
+
+                //contain at least 2 lowercase alphabet
+                var Pattrn2 = /(?=(.*[a-z]){2,})/;
+                var result2 = Pattrn2.test(string);
+
+                //contain at least 2 digit
+                var Pattrn3 = /(?=(.*[0-9]){2,})/;
+                var result3 = Pattrn3.test(string);
+
+                //contain at least 2 special characters
+                var Pattrn4 = /(?=(.*[\W]){2,})/;
+                var result4 = Pattrn4.test(string);
+
+                if(result === false || result1 === false || result2 === false || result3 === false || result4 === false){
+                    document.getElementById("passwd").style.display='block'; //show div
+                    return false;
+                }else{
+                    document.getElementById("passwd").style.display='none'; //hide div
+                    return true;//do noting
+                }
+            }
+            function isPassWdValid(string){
+                //contain minimum of 8 chars, maximum of 12 chars
+                var Pattrn = /(?=(.*[A-Za-z0-9\W]){8,12})/;
+                var result = Pattrn.test(string);
+
+                //contain at least 2 Uppercase alphabet
+                var Pattrn1 = /(?=(.*[A-Z]){2,})/;
+                var result1 = Pattrn1.test(string);
+
+                //contain at least 2 lowercase alphabet
+                var Pattrn2 = /(?=(.*[a-z]){2,})/;
+                var result2 = Pattrn2.test(string);
+
+                //contain at least 2 digit
+                var Pattrn3 = /(?=(.*[0-9]){2,})/;
+                var result3 = Pattrn3.test(string);
+
+                //contain at least 2 special characters
+                var Pattrn4 = /(?=(.*[\W]){2,})/;
+                var result4 = Pattrn4.test(string);
+
+                if(result === false || result1 === false || result2 === false || result3 === false || result4 === false){
+                    return false;
+                }else{
+                    return true;//do noting
+                }
+            }
+            function Validate_password_again(string,string1){    
+                if(string === string1){
+                    document.getElementById("conpasswd").style.display='none'; //hide div
+                    return true;//do noting        
+                }else{
+                    document.getElementById("conpasswd").style.display='block'; //show div
+                    return false;
+                }
+            }
+            function Validate_email(string){
+                var Pattrn = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+                var result = Pattrn.test(string);
+
+                if(result === false){
+                    document.getElementById("email").style.display='block'; //show div
+                    return false;
+                }else{
+                    document.getElementById("email").style.display='none'; //hide div
+                    return true;//do noting
+                }
+            }
+            function isEmailValid(string){
+                var Pattrn = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+                var result = Pattrn.test(string);
+
+                return result;
+            }
+            function Validate_firstname(string){
+                var Pattrn = /^[A-Za-z]*$/;
+                var result = Pattrn.test(string);
+
+                if(result === false){
+                    document.getElementById("firstnm").style.display='block'; //show div
+                    return false;
+                }else{
+                    document.getElementById("firstnm").style.display='none'; //hide div
+                    return true;//do noting
+                }
+            }
+            function Validate_lastname(string){
+                var Pattrn = /^[A-Za-z]*$/;
+                var result = Pattrn.test(string);
+
+                if(result === false){
+                    document.getElementById("lastnm").style.display='block'; //show div
+                    return false;
+                }else{
+                    document.getElementById("lastnm").style.display='none'; //hide div
+                    return true;//do noting
+                }
+            }
+            const mysignupFrmDiv = document.getElementById("signupFrmDiv");
+            const myloginFrmDiv = document.getElementById("loginFrmDiv");
+            const myAboveDashboard = document.getElementById("aboveDashboard");
+            const myDashboard = document.getElementById("dashboard");
+            const myTODO = document.getElementById("TODOcreationfrmDiv");
+            const todoDiv = document.getElementById("todo");
+            const signup_login_div = document.getElementById("btnContainer");
+            const signUp = document.getElementById("signup");
+            const Login = document.getElementById("login");
+            const signUpFrm = document.getElementById("signupFrm");
+            const loginFrm = document.getElementById("loginFrm");
+            const newListNameEle = document.getElementById("newListNameInput");
+            const userSetting = document.getElementById("userSetting");
+            const Logout = document.getElementById("Logout");
+            const Home = document.getElementById("Home");
+            const Dashboard = document.getElementById("Dashbd");//link
+            const renameListIcon = document.getElementById("renameListIcon");
+            const InputFirstname = document.getElementById("InputFirstname");
+            const InputLastname = document.getElementById("InputLastname");
+            const InputEmail = document.getElementById("InputEmail");
+            const InputPassword = document.getElementById("InputPassword");
+            const InputconPassword = document.getElementById("InputconPassword");
+            
+            Dashboard.addEventListener("click",()=>{
+                //remove all child nodes of todo div
+                removeEveryLastChild(myAboveDashboard);
+                removeEveryLastChild(myDashboard);
+                removeEveryLastChild(todoDiv);
+                todoDiv.appendChild(myAboveDashboard);//append dashboard
+                document.getElementById("aboveDashboard").style.display="block";
+                todoDiv.appendChild(myDashboard);//append dashboard
+                document.getElementById("dashboard").style.display="block";
+                displayTODO(null);
+            }); 
+            Home.addEventListener("click",()=>{
+                let loggedIn = localStorage.getItem("logged-in");
+                if(loggedIn){
+                    //remove all child nodes of todo div
+                    removeEveryLastChild(myAboveDashboard);
+                    removeEveryLastChild(myDashboard);
+                    removeEveryLastChild(todoDiv);
+                    //display login welcome screen
+                    todoDiv.appendChild(signup_login_div);
+                }else{
+                    //remove all child nodes of todo div
+                    removeEveryLastChild(myAboveDashboard);
+                    removeEveryLastChild(myDashboard);
+                    removeEveryLastChild(todoDiv);
+                    //display login welcome screen
+                    todoDiv.appendChild(signup_login_div);
+                    //hide links
+                    document.getElementById("newTODO").style.display="none";
+                    document.getElementById("usernmWelcomeSpan").style.display="none";
+                }
+            });
+            Logout.addEventListener("click",()=>{
+                localStorage.setItem("logged-in",0);//logout user
+                //remove all child nodes of todo div
+                removeEveryLastChild(myAboveDashboard);
+                removeEveryLastChild(myDashboard);
+                removeEveryLastChild(todoDiv);
+                //display login welcome screen
+                todoDiv.appendChild(signup_login_div);
+                //hide links
+                Dashboard.style.display = "none";
+                document.getElementById("newTODO").style.display="none";
+                document.getElementById("usernmWelcomeSpan").style.display="none";
+            });
+            
+            userSetting.addEventListener("click",()=>{
+                //retreive user registration record from localStorage
+                var usrObjRegDetailstr = localStorage.getItem(document.getElementById("usernameWelcome").textContent);
+                //assign each user entry accordingly
+                var usrObjRegDetail = JSON.parse(usrObjRegDetailstr);
+                InputFirstname.value = usrObjRegDetail.Firstname;
+                InputLastname.value = usrObjRegDetail.Lastname;
+                InputEmail.value = usrObjRegDetail.Email;
+                InputPassword.value = usrObjRegDetail.Password;
+                InputconPassword.value = usrObjRegDetail.Password;
+                //remove all child nodes of todo div
+                removeEveryLastChild(todoDiv);
+                //display form
+                todoDiv.appendChild(mysignupFrmDiv);//append signup form
+                document.getElementById("InputEmail").readOnly = true;//don't allow user change email address
+                mysignupFrmDiv.style.display = "block";//display signup form
+            });
+            
+            signUp.addEventListener("click",load_form);//load signup form
+            signUpFrm.addEventListener("submit",check_for_form_input_errors);
+            
+            Login.addEventListener("click",load_form);//load login form
+            loginFrm.addEventListener("submit",check_for_form_input_errors);
+            
+            function load_form(e){
+                todoDiv.removeChild(signup_login_div);//remove signup div
+                
+                if(e.target.id === "signup"){
+                    todoDiv.appendChild(mysignupFrmDiv);//append signup form
+                    mysignupFrmDiv.style.display = "block";//display signup form
+                    signUpFrm.reset();//reset signup form
+                }else{
+                    todoDiv.appendChild(myloginFrmDiv);//append login form
+                    myloginFrmDiv.style.display = "block";//display signup form
+                    //todoDiv.appendRemove(signUpFrm);//remove sign up form
+                }
+            }
+            function check_for_form_input_errors(e){
+                e.preventDefault();
+                if(e.target.id === "signupFrm"){
+                    //Validate_username(document.getElementById("InputUsername").value);
+                    Validate_firstname(document.getElementById("InputFirstname").value);
+                    Validate_lastname(document.getElementById("InputLastname").value);
+                    Validate_email(document.getElementById("InputEmail").value);
+                    Validate_password(document.getElementById("InputPassword").value);
+                    Validate_password_again(document.getElementById("InputPassword").value,document.getElementById("InputconPassword").value);
+                    
+                    //store data
+                    ///////////////////////////////////////////////////////////////////////////////////////////
+                    let myRegObj = {//store user's detail as an object using email as key to each object
+                        "Firstname" : document.getElementById("InputFirstname").value,
+                        "Lastname" : document.getElementById("InputLastname").value,
+                        "Email" : document.getElementById("InputEmail").value,
+                        "Password" : document.getElementById("InputPassword").value
+                    };
+                    localStorage.setItem(document.getElementById("InputEmail").value, JSON.stringify(myRegObj));
+                    //console.log(document.getElementById("InputEmail").value);
+                    localStorage.setItem("usrWelcomeEmail",document.getElementById("InputEmail").value);//store welcome email
+                    document.getElementById("usernameWelcome").innerText = localStorage.getItem("usrWelcomeEmail");//retrieve welcome email and display it
+                    localStorage.removeItem("usrWelcomeEmail");//delete welcome email
+                    document.getElementById("usernmWelcomeSpan").style.display="block";
+                    ////////////////////////////////////////////////////////////////////////////////////////////
+                    if(document.getElementById("usernameWelcome").innerText){
+                        //display account detail Change success MSG
+                        document.getElementById("accountChangeMSGdiv").style.display='block';
+                    }else{
+                        //display account creation success msg
+                        document.getElementById("accountCreationMSGdiv").style.display='block';
+                        todoDiv.removeChild(mysignupFrmDiv);//remove signup div
+                        todoDiv.appendChild(myloginFrmDiv);//append login form
+                        myloginFrmDiv.style.display = "block";//display signup form
+                        loginFrm.reset();//reset login form
+                    }
+                }else{
+                    //Compare login detail with stored user credentials
+                    let validEmail = isEmailValid(document.getElementById("InputLoginEmail").value);
+                    let validPassWd = isPassWdValid(document.getElementById("InputLoginPassword").value);
+                    if(validEmail && validPassWd){
+                        //do nothing
+                        document.getElementById("loginErrMsgdiv").style.display="none";
+                    }else{
+                        document.getElementById("loginErrMsgdiv").style.display="block";
+                        document.getElementById("accountCreationMSGdiv").style.display='none';
+                        return false;
+                    }
+                    
+                    //Retrieve user's login credentials
+                    let usrObj = JSON.parse(localStorage.getItem(document.getElementById("InputLoginEmail").value));
+                    if(!usrObj){//user does not exist in localStorage
+                        document.getElementById("loginErrMsgdiv").style.display="block";
+                        document.getElementById("accountCreationMSGdiv").style.display='none';
+                        return false;
+                    }
+                    if(usrObj.Email === document.getElementById("InputLoginEmail").value
+                            && usrObj.Password === document.getElementById("InputLoginPassword").value){
+                        document.getElementById("loginErrMsgdiv").style.display="none";
+                        //display create new todo button
+                        document.getElementById("newTODO").style.display="block";
+                        //display dashboard link
+                        Dashboard.style.display="block";
+                        //display welcome message
+                        //console.log(document.getElementById("InputLoginEmail").value);
+                        localStorage.setItem("usrWelcomeEmail",document.getElementById("InputLoginEmail").value);//store welcome email
+                        document.getElementById("usernameWelcome").innerText = localStorage.getItem("usrWelcomeEmail");//retrieve welcome email and display it
+                        localStorage.removeItem("usrWelcomeEmail");//delete welcome email
+                        document.getElementById("usernmWelcomeSpan").style.display="block";
+                        //display dashboard
+                        todoDiv.removeChild(myloginFrmDiv);//remove login div
+                        todoDiv.appendChild(myAboveDashboard);//append dashboard
+                        document.getElementById("aboveDashboard").style.display="block";
+                        todoDiv.appendChild(myDashboard);//append dashboard
+                        document.getElementById("dashboard").style.display="block";
+                        localStorage.setItem("logged-in",1);//set user session to logged in
+                        displayTODO(null);
+                    }else{
+                        document.getElementById("loginErrMsgdiv").style.display="block";
+                        document.getElementById("accountCreationMSGdiv").style.display='none';
+                        return false;
+                    }
+                }
+            }
+            //load new TODO form
+            let newTODO = document.getElementById("newTODO");
+            newTODO.addEventListener("click",function newTODO(){
+                if(!myAboveDashboard.parentNode){
+                    //do nothing
+                }else{
+                    if(myAboveDashboard.parentNode.id === "todo"){
+                        todoDiv.removeChild(myAboveDashboard);//remove above div
+                    }
+                }
+                if(!myDashboard.parentNode){
+                    //do nothing
+                }else{
+                    if(myDashboard.parentNode.id === "todo"){
+                        todoDiv.removeChild(myDashboard);//remove dashboard div
+                    }
+                }
+                //remove signup form div signupFrmDiv
+                if(!mysignupFrmDiv.parentNode){
+                    //do nothing
+                }else{
+                    if(mysignupFrmDiv.parentNode.id === "todo"){
+                        todoDiv.removeChild(mysignupFrmDiv);//remove signup div
+                    }
+                }
+                //remove login/signup btnContainer div
+                if(!signup_login_div.parentNode){
+                    //do nothing
+                }else{
+                    if(signup_login_div.parentNode.id === "todo"){
+                        todoDiv.removeChild(signup_login_div);//remove btnContainer div
+                    }
+                }
+                todoDiv.appendChild(myTODO);//append TODO form
+                myTODO.style.display='block';//display form
+                loadListNames();//load List Names
+            });
+            //Save Task
+            let taskTODO = document.getElementById("TODOcreationfrm");
+            taskTODO.addEventListener("submit",function saveTODOtask(e){
+                e.preventDefault();
+                //retrieve form values and store in todoObj
+                let todoObj = {
+                    "listName" : document.getElementById("InputListName").value,
+                    "title" : document.getElementById("InputTodoTitle").value,
+                    "desc" : document.getElementById("InputTodoDesc").value
+                };
+                ////////////////////////save data in localstorage//////////////////////////
+                //retrieve localstorage record 0 for this user
+                let usrSavedTODO = localStorage.getItem(document.getElementById("InputListName").value+"0"+document.getElementById("usernameWelcome").innerText);
+                if(!usrSavedTODO){//if localstorage record does not exist
+                    //store record with the index 0 attached to beginning of key
+                    localStorage.setItem(document.getElementById("InputListName").value+"0"+document.getElementById("usernameWelcome").innerText,JSON.stringify(todoObj));
+                }else{//otherwise
+                    let key;
+                    let maxIndx = null;
+                    let i = 0;
+                    var listNameLenght = document.getElementById("InputListName").value.length;
+                    while(localStorage.getItem(key = document.getElementById("InputListName").value+i+document.getElementById("usernameWelcome").innerText)){//for each key in localStorage
+                        //extract index at the beginning  of the key
+                        let extractedIndx = parseInt(key.substring(listNameLenght));
+                        //get the substr of the key (from second index to the last)
+                        //let subtractedEmail = key.substring(1,key.length);
+                        if(maxIndx === null){
+                            maxIndx = extractedIndx;//save the extracted index in maxIndx
+                        }else{//otherwise
+                            if(extractedIndx > maxIndx){
+                                maxIndx = extractedIndx;
+                            }//end if
+                        }//end if
+                        i += 1;//increment i
+                    }//end loop
+                    maxIndx += 1;//increment maxIndx by 1
+                    //store record with the incremented index attached to the beginning of the key
+                    localStorage.setItem(document.getElementById("InputListName").value+maxIndx+document.getElementById("usernameWelcome").innerText,JSON.stringify(todoObj));
+                    //Display TODO task successfully posted
+                    document.getElementById("TODOCreationMSGdiv").style.display = "block";
+                }//end if
+                //save last listName (so as to display same by default)
+                localStorage.setItem("lastListName",document.getElementById("InputListName").value);
+                document.getElementById("TODOcreationfrm").reset();//reset the form
+            });
+            
+            function insertNewElement(referenceNode, newNode, i) {
+                //referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+                referenceNode.insertBefore(newNode, referenceNode.childNodes[i]);
+            }
+            
+            function loadListNames(){
+                let key;
+                let i = 0;
+                let x = 0;
+                var llObjstr;
+                var llObjSubstr;
+                var hashMap = new Object();//initialize empty map object
+                while(key = localStorage.key(i)){//for each key in localStorage
+                    llObjstr = localStorage.getItem(key);//retrieve data for this key
+                    //console.log(llObjstr.length);
+                    llObjSubstr = llObjstr.substring(0,10);
+                    if(llObjSubstr !== '{"listName'){
+                        i += 1;//increment i
+                        continue;
+                    }
+                    llObj = JSON.parse(llObjstr);//convert JSON string back to javascript object
+                    //compare list name
+                    if(hashMap[llObj.listName] || llObj.listName === "undefined"){//if hashMap object key exist
+                        i += 1;//increment i
+                        continue;//check next item until you find something different
+                    }
+                    //get lastRetrievedListName
+                    hashMap[llObj.listName] = 1;
+                    //display list names
+                    var ele = document.createElement("option");//Create a new option element
+                    ele.id = key+"option";
+                    ele.className = "listNameOption";
+                    ele.href = "#";
+                    //Set the value
+                    ele.value = llObj.listName;
+                    // Add the optionNode to the datalist
+                    //document.getElementById("ListName").appendChild(ele);
+                    insertNewElement(document.getElementById("ListName"), ele, x);//append TODO list
+                    x += 1;//increment x
+                    i += 1;//increment i
+                }//end loo
+            }
+            function loadTODOListNames(){
+                let key;
+                let i = 0;
+                let x = 0;
+                var llObjstr;
+                var llObjSubstr;
+                var hashMap = new Object();//initialize empty map object
+                while(key = localStorage.key(i)){//for each key in localStorage
+                    llObjstr = localStorage.getItem(key);//retrieve data for this key
+                    llObjSubstr = llObjstr.substring(0,10);
+                    if(llObjSubstr !== '{"listName'){
+                        i += 1;//increment i
+                        continue;
+                    }
+                    llObj = JSON.parse(llObjstr);//convert JSON string back to javascript object
+                    //compare list name
+                    if(hashMap[llObj.listName] || llObj.listName === "undefined"){//if hashMap object key exist
+                        i += 1;//increment i
+                        continue;//check next item until you find something different
+                    }
+                    //get lastRetrievedListName
+                    hashMap[llObj.listName] = 1;
+                    //display list names
+                    var ele = document.createElement("option");//Create a new option element
+                    ele.id = key+"option";
+                    ele.className = "listNameOption";
+                    ele.href = "#";
+                    //Set the value
+                    ele.value = llObj.listName;
+                    // Add the optionNode to the datalist
+                    //document.getElementById("ListName2").appendChild(ele);
+                    insertNewElement(document.getElementById("ListName2"), ele, x);//append option to datalist
+                    x += 1;//increment x
+                    i += 1;//increment i
+                }//end loop
+            }
+            
+            var renameListAnchor = document.getElementById("renameListAnchor");
+            renameListAnchor.addEventListener("click",function DisplayListNameTextBox(e){
+                //get list name
+                //console.log(e.target.id);
+                document.getElementById("renameListDiv").removeChild(document.getElementById(e.target.id));
+                newListNameEle.style.display = "inline-block";
+                document.getElementById("renameListDiv").appendChild(newListNameEle);
+            });
+            
+            var newListNameInput = document.getElementById("newListNameInput");
+            newListNameInput.addEventListener("keyup",function ChangeListName(e){
+                let key;
+                let llObj;
+                let llObjstr;
+                let llObjSubstr;
+                var currName;
+                if (e.keyCode === 13) {
+                    let i = 0;
+                    //grab displayed list name
+                    currName = document.getElementById("renameListSpan").innerText;
+                    //grab all key in localStorage associated with this list and rename
+                    while(key = localStorage.key(i)){//loop through each key in localStorage
+                        llObjstr = localStorage.getItem(key);//retrieve data for this key
+                        llObjSubstr = llObjstr.substring(0,10);
+                        if(llObjSubstr !== '{"listName'){
+                            i += 1;//increment i
+                            continue;
+                        }
+                        //get the listname from retreived data 
+                        llObj = JSON.parse(llObjstr);
+                        if(llObj.listName === currName){//if same, change list name
+                            //replace the listname from the key with the new listname
+                            let replacedKey = key.replace(currName,newListNameInput.value);
+                            //change the listname record for this key
+                            llObj.listName = newListNameInput.value;
+                            localStorage.setItem(replacedKey,JSON.stringify(llObj));
+                            //remove changed data from localstorage
+                            localStorage.removeItem(key);
+                        }
+                        i++;//increment 
+                    }//end loop
+                    //remove the listname that has been changed
+                    localStorage.removeItem(currName);
+                    //save modified list name as last listName (so as to display same by default)
+                    localStorage.setItem("lastListName",newListNameInput.value);
+                    //Print Modified name on screen
+                    document.getElementById("renameListSpan").innerText = newListNameInput.value;
+                    //remove the children of myAboveDashboard div
+                    myAboveDashboard.removeChild(myAboveDashboard.lastChild);
+                    //remove the children of dashboard div
+                    removeEveryLastChild(myDashboard);
+                    //display the list all over again (so that you can load the listnames including the changed list name)
+                    displayTODO(null);
+                }
+            });           
+            var removeEveryLastChild = (myNode)=>{
+                while(myNode.firstChild){
+                    myNode.removeChild(myNode.lastChild);
+                }
+            };
+            function displayTODO(ListName){//function to display todo list items for a user
+                let todoObjStr;
+                let todoObj;
+                let key;
+                let i = 0;
+                //var mydashbdLoaded = document.getElementById("dashboard");
+                
+                if(!ListName){
+                    //Get the last list name (this is what i display by default)
+                    var lastListName = localStorage.getItem("lastListName");
+                    ListName = lastListName;//if this is the first time the list is displayed
+                    if(localStorage.getItem(key = ListName+0+document.getElementById("usernameWelcome").innerText)){
+                        //////////////////add list rename icon/////////////////////////
+                        myAboveDashboard.appendChild(renameListIcon);
+                        renameListIcon.style.display = "block";
+                        document.getElementById("renameListSpan").innerText = ListName;
+                        ///////////////////////////////////////////////////////////////
+                        /////////////////first create and populate listname text/option box///////////////////
+                        var elem = document.createElement("label");
+                        elem.id = "TODOListName";
+                        //elem.className = "form-label";
+                        elem.innerHTML = '<input id="InputListName2" list="ListName2" type="text" name="todoListName" class="form-control loginfrmInputs" placeholder="Enter list name or double click to choose one" oninput="myListSelection(event)"><datalist id="ListName2"></datalist>';
+                        myAboveDashboard.appendChild(elem);
+                        loadTODOListNames();
+                    }
+                    /////////////////////////////////////////////////////////////////////////
+                }
+                document.getElementById("renameListSpan").innerText = ListName;
+                while(todoObjStr = localStorage.getItem(key = ListName+i+document.getElementById("usernameWelcome").innerText)){//for each key in localStorage                       
+                    todoObj = JSON.parse(todoObjStr);//convert JSON string back to javascript object
+                    //display TODO task
+                    var ele = document.createElement("a");
+                    ele.id = key;
+                    ele.href = "#";
+                    if(i === 0){
+                        ele.className = "todoAnchor list-group-item list-group-item-action flex-column align-items-start active";
+                    }else{
+                        ele.className = "todoAnchor list-group-item list-group-item-action flex-column align-items-start";
+                    }
+                    ele.innerHTML = '<div class="todoAnchorDiv d-flex w-100 justify-content-between"><h5 id="todoTitle'+i+'" class="mb-1">'+todoObj.title+'</h5><label id="taskDoneLabel'+i+'" for="1627177022055" class="tick js-tick"><i id="taskDone'+i+'" style="display:none" class="fas fa-check fa-2x text-success font-weight-bold"></i></label></div><p id="todoDesc'+i+'" class="todoDESC mb-1">'+todoObj.desc+'</p>';
+                    insertNewElement(myDashboard, ele, i);//append TODO list
+                    i += 1;//increment i
+                }//end loop
+            }
+            
+            //display single todo list item
+            var mydashbdLoaded = document.getElementById("dashboard");
+            mydashbdLoaded.addEventListener('click',function DisplayTodoItem(e) {
+                if(e.target.tagName === "LABEL"){
+                    var LABELID = document.getElementById(e.target.id);
+                    //console.log(LABELID.childNodes[0]);
+                    if(LABELID.childNodes[0].style.display === "block"){
+                        LABELID.childNodes[0].style.display = "none";//hide task completion tick icon
+                    }else{
+                        LABELID.childNodes[0].style.display = "block";//show task completion tick icon
+                    }
+                }else if(e.target.tagName === "I"){
+                    var iID = document.getElementById(e.target.id);
+                    if(iID.style.display === "block"){
+                        iID.style.display = "none";//hide task completion tick icon
+                    }else{
+                        iID.style.display = "block";//show task completion tick icon
+                    }
+                }else{
+                    //display the single list item
+                    let TODOitemObjStr;
+                    if(e.target.tagName === "A"){
+                        TODOitemObjStr = localStorage.getItem(e.target.id);
+                    }else{
+                        TODOitemObjStr = localStorage.getItem(e.target.parentNode.id);
+                    }
+                    TODOitemObj = JSON.parse(TODOitemObjStr);//convert JSON string back to javascript object
+                    //display TODO task
+                    var ele = document.createElement("a");
+                    ele.id = "singleTodoItem";
+                    //ele.href = "#";
+                    ele.className = "singleTodoAnchor list-group-item list-group-item-action flex-column align-items-start";
+                    ele.innerHTML = '<div class="singleTodoAnchorDiv d-flex w-100 justify-content-between"><h5 id="singleTodoTitle" class="mb-1">'+TODOitemObj.title+'</h5></div><p id="todoDesc" class="todoDESC mb-1">'+TODOitemObj.desc+'</p>';
+
+                    //remove dashboard div
+                    if(e.target.tagName === "A"){//if the anchor tag of the singleTodoItem is clicked
+                        e.target.parentNode.remove();
+                    }else{//if any other part of the singleTodoItem is clicked
+                        e.target.parentNode.parentNode.remove();
+                    }
+                    
+                    //remove single
+                    document.getElementById("TODOListName").parentNode.remove();
+                    //append the single list item
+                    var todoDv = document.getElementById("todo");
+                    todoDv.appendChild(ele);
+                }
+            });
+            function myListSelection(e){
+                if(e.inputType === "insertReplacementText" || e.inputType === null) {//datalist option selected, change displayed todo list
+                    console.log(e.target.value);
+                    myDashboard.textContent = '';//remove previously displayed list
+                    displayTODO(e.target.value);  
+                }
+            }
+        </script>
+        <!-- Font Awesome Kit Code -->
+        <script src="https://kit.fontawesome.com/e08f159945.js" crossorigin="anonymous"></script>
+        
+        <!-- Bootstrap things dem -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+</html>
+<style>
+    /* media query */
+    @media (min-width: 280px) and (max-width: 575.98px) {
+        #renameListSpan{
+            text-align:center;
+        }
+        #renameListDiv{
+            text-align:center;
+        }
+    }
+    @media (min-width: 575.99px) and (max-width: 769px) {
+        #renameListSpan{
+            min-width: 60%;
+            text-align:center;
+        }
+        #renameListDiv{
+            min-width: 60%;
+            text-align:center;
+        }
+    }
+    /* Medium devices (tablets, 768px and up) */
+    @media (min-width: 769px) and (max-width: 1516px) {
+        .todo{
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .content{
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #signupFrmDiv{
+            margin-top: 120px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #loginFrmDiv{
+            margin-top: 90px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #btnContainer{
+            margin-top: 70px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+    @media (min-width: 280px) and (max-width: 768px) {
+        #todo{
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #navContainer{
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #navigation{
+            max-height: 100%;
+        }
+        .navbar{
+            max-height: 100%;
+        }
+        .content{
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #signupFrmDiv{
+            margin-top: 100px;
+            max-width: 100%;
+            min-width: 100%;
+            background-size:cover;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #loginFrmDiv{
+            margin-top: 90px;
+            max-width: 100%;
+            min-width: 100%;
+            background-size:cover;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #appDesc{
+            margin-top: 20px;
+        }
+        #btnContainer{
+            margin-top: 70px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #dashboard{
+            margin-top: 0px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #aboveDashboard{
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #InputListName2{
+            width: 90%;
+        }
+    }
+</style>
